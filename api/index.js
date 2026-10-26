@@ -11,17 +11,17 @@ import waitingRoutes from "./routes/waitingRoutes.js";
 import getComplaint from "./routes/complaintRoutes.js";
 
 const app = express();
-dotenv.config();
-//  console.log(process.env.MONGO)
+const __dirname = path.resolve();
+dotenv.config({ path: path.join(__dirname, "api", ".env") });
+const mongoUri = process.env.MONGO || "mongodb://127.0.0.1:27017/hostelapp";
 mongoose
-  .connect(process.env.MONGO)
+  .connect(mongoUri)
   .then(() => {
     console.log('MongoDb is connected');
   })
   .catch((err) => {
     console.log(err);
   });
-const __dirname=path.resolve();
 app.use(express.static(path.join(__dirname,'/ease_manager/dist')));
 app.use(express.json())
 // app.use(express.urlencoded)

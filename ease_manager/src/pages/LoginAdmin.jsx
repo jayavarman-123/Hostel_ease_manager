@@ -72,11 +72,11 @@ export default function LoginAdmin() {
               {/* Header */}
               <div className="flex items-center justify-center mb-8">
                 <img 
-                  src="./PSG_img.png" 
-                  alt="PSG Institution logo" 
-                  className="w-12 h-12 mr-3" 
+                  src="/SKCET.jpg" 
+                  alt="SKCET Institute logo" 
+                  className="h-12 w-auto max-w-40 object-contain mr-3" 
                 />
-                <h1 className="text-xl font-bold text-red-700">PSG INSTITUTION</h1>
+                <h1 className="text-xl font-bold text-red-700">SKCET INSTITUTE</h1>
               </div>
 
               {/* Admin Badge */}

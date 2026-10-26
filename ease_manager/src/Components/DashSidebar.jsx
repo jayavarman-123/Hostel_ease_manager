@@ -48,8 +48,8 @@ function DashSidebar({isSideBarOpen, setIsSideBarOpen}) {
       <aside className="w-[100%] h-screen bg-sidebar  flex flex-col text-sidebartext">
         {/* Logo */}
         <div className="flex items-center px-4 py-[1rem] space-x-3 border-b border-blue-500">
-          <img src="./psg_icon.jpg" alt="PSG Logo" className="h-8 w-8 rounded-full" />
-          <span className=" text-md md:text-lg font-bold">PSG Hostel</span>
+          <img src="/SKCET.jpg" alt="SKCET Institute logo" className="h-8 w-auto max-w-32 object-contain" />
+          <span className=" text-md md:text-lg font-bold">SKCET Institute Hostel</span>
         </div>
 
         {/* Menu Items */}

@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 
 import Student from "../modals/student.js";
 import students from "./studentseed.js";
@@ -9,15 +10,11 @@ import blocks from "./blockseed.js";
 import Block from "../modals/block.js";
 import Floor from "../modals/floor.js";
 import Admin from "../modals/admin.js";
-dotenv.config({path:'../.env'})
-mongoose
-  .connect(process.env.MONGO)
-  .then(() => {
-    console.log('MongoDb is connected');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
 const hashPassword = async (rollNumber) => {
     const saltRounds = 10; 
     return await bcrypt.hash(rollNumber, saltRounds);
@@ -34,13 +31,11 @@ const hashPassword = async (rollNumber) => {
       })
       await admin.save()
       console.log("Admin data with hashed passwords seeded successfully");
-      mongoose.disconnect();
     } catch (error) {
       console.error("Error seeding student data:", error);
-      mongoose.disconnect();
+      throw error;
     }
   };
-  // seedAdmin()
 const seedStudents = async () => {
     try {
       await Student.deleteMany({});
@@ -49,26 +44,22 @@ const seedStudents = async () => {
       }
       await Student.insertMany(students);
       console.log("Student data with hashed passwords seeded successfully");
-      mongoose.disconnect();
     } catch (error) {
       console.error("Error seeding student data:", error);
-      mongoose.disconnect();
+      throw error;
     }
   };
-//  seedStudents();
 const seedBlocks = async () => {
     try {
       await Block.deleteMany({});
       await Block.insertMany(blocks);
   
       console.log("Block data seeded successfully");
-      mongoose.disconnect();
     } catch (error) {
       console.error("Error seeding block data:", error);
-      mongoose.disconnect();
+      throw error;
     }
   };
-// seedBlocks();
 const seedFloors = async () => {
     try {
       await Floor.deleteMany({});
@@ -87,10 +78,26 @@ const seedFloors = async () => {
       }
   
       console.log("Floor data seeded successfully");
-      mongoose.disconnect();
     } catch (error) {
       console.error("Error seeding floor data:", error);
-      mongoose.disconnect();
+      throw error;
     }
   };
-  seedFloors();
+
+const seed = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO);
+    console.log("MongoDb is connected");
+    await seedAdmin();
+    await seedStudents();
+    await seedBlocks();
+    await seedFloors();
+  } finally {
+    await mongoose.disconnect();
+  }
+};
+
+seed().catch((error) => {
+  console.error("Seeding failed:", error);
+  process.exitCode = 1;
+});
